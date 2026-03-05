@@ -1,0 +1,12 @@
+add
+Телефон
+10
+20
+999.99
+Apple
+Apple Inc.
+COMMERCIAL
+info
+show
+save
+exit

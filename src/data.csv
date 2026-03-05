@@ -1,0 +1,2 @@
+id,name,coord_x,coord_y,creationDate,price,partNumber,manufactureCost,unitOfMeasure,org_id,org_name,org_fullName,org_type
+1,exit,123,1,2026-03-05T19:52:18.505448+03:00[Europe/Moscow],23.0,,123.0,,1,123,123,GOVERNMENT
