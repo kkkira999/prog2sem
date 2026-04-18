@@ -1,0 +1,46 @@
+plugins {
+    id 'application'
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+application {
+    mainClass = 'client.ClientApp'
+}
+
+tasks.named('run') {
+    standardInput = System.in
+}
+
+tasks.register('runClient', JavaExec) {
+    group = 'application'
+    description = 'Runs the client application'
+    mainClass = 'client.ClientApp'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['localhost', '1234']
+    standardInput = System.in
+}
+
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Builds an executable client JAR with all dependencies'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'client.ClientApp'
+    }
+
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('fatJar')
+}
