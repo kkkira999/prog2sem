@@ -1,46 +1,40 @@
 plugins {
-    id 'java'
-    id 'application'
+    id 'base'
 }
 
-group = 'lab5'
-version = '1.0.0'
+allprojects {
+    group = 'lab5'
+    version = '1.0.0'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    repositories {
+        mavenCentral()
     }
 }
 
-buildDir = '.gradle-build'
+subprojects {
+    apply plugin: 'java'
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-        resources {
-            srcDirs = []
+    buildDir = "${rootProject.projectDir}/.gradle-build/${project.name}"
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
-    test {
-        java {
-            srcDirs = []
-        }
-        resources {
-            srcDirs = []
-        }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
 }
 
-application {
-    mainClass = 'main.Main'
+tasks.register('runServer') {
+    group = 'application'
+    description = 'Runs the server module'
+    dependsOn ':server:runServer'
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-tasks.named('run') {
-    standardInput = System.in
+tasks.register('runClient') {
+    group = 'application'
+    description = 'Runs the client module'
+    dependsOn ':client:runClient'
 }
