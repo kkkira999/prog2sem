@@ -1,0 +1,46 @@
+plugins {
+    id 'application'
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+application {
+    mainClass = 'server.ServerApp'
+}
+
+tasks.named('run') {
+    standardInput = System.in
+}
+
+tasks.register('runServer', JavaExec) {
+    group = 'application'
+    description = 'Runs the server application'
+    mainClass = 'server.ServerApp'
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['1234']
+    standardInput = System.in
+}
+
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Builds an executable server JAR with all dependencies'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'server.ServerApp'
+    }
+
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('fatJar')
+}

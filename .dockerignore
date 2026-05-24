@@ -1,0 +1,10 @@
+.git
+.gitignore
+.gradle-build
+.gradle
+.gradle-local
+.idea
+*.iml
+*.log
+logs/
+*.class
